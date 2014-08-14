@@ -19,6 +19,10 @@ module ApplicationHelper
     end
   end
 
+  #gravatar
+  def gravatar(user, opts = { :size => 48 })
+    "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(user.email.downcase)}?s=#{opts[:size]}"
+  end
   # Generates a left navigation link setting the class according to the result of a
   # call to the #active_class method.
   #

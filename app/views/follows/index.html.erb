@@ -13,6 +13,7 @@
     <ol class="list-unstyled">
       <% @users.each do |user| -%>
       <li>
+        <%= content_tag :td, image_tag(gravatar(user, :size => 32), :class => 'pull-left img-rounded', :style => 'margin: 5px 8px 4px 0;'), :style => 'width: 60px;' %>
         <%= content_tag :strong, user.name, :class => 'pull-left text-middle' %>
         <%= content_tag :span, "@"+user.username, :class => 'text-muted pad-10 text-middle' %>
         <%= follow_link(user) %>
