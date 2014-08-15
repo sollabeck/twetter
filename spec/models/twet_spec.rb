@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Twet do
   context "associations" do
     it { should belong_to :user }
+    it { should have_many :retwets }
   end
 
   context "factories" do
@@ -38,11 +39,22 @@ describe Twet do
 
   describe ".by_user_ids" do
     let!(:t1) { FactoryGirl.create(:twet) }
-    let!(:t2) { FactoryGirl.create(:twet)}
+    let!(:t2) { FactoryGirl.create(:twet) }
     let!(:t3) { FactoryGirl.create(:twet) }
+    let!(:t4) { FactoryGirl.create(:twet) }
+    let!(:t5) { FactoryGirl.create(:twet) }
+    let!(:t6) { FactoryGirl.create(:twet) }
 
     it "should search by user ids" do
-      Twet.by_user_ids(t1.user.id, t3.user.id).load.map(&:user_id).should == [t3.user.id, t1.user.id]
+      Twet.by_user_ids(t1.user.id, t3.user.id).load.map(&:id).should == [t3.id, t1.id]
+    end
+
+    it "should include retwets of the users" do
+      t4.retwets.create!(:user => t3.user)
+      t5.retwets.create!(:user => t4.user)
+      t6.retwets.create!(:user => t2.user)
+
+      Twet.by_user_ids(t1.user.id, t3.user.id).load.map(&:id).should == [t4.id, t3.id, t1.id]
     end
   end
 end
